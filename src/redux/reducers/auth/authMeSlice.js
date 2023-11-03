@@ -5,7 +5,7 @@ const initialState = {
 };
 
 const authMeSlice = createSlice({
-  name: "search",
+  name: "dataUser",
   initialState,
   reducers: {
     setDataUser: (state, action) => {
@@ -14,6 +14,6 @@ const authMeSlice = createSlice({
   },
 });
 
-export const { setSearchMovie } = authMeSlice.actions;
+export const { setDataUser } = authMeSlice.actions;
 
 export default authMeSlice.reducer;

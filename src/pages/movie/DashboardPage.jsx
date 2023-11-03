@@ -8,6 +8,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { DataMovie } from '../../redux/actions/authMovies';
 import { LogOut } from '../../redux/actions/authLogin';
 import { SearchDataMovies } from '../../redux/actions/authSearchMovies';
+import user from '../../asset/img/agam.JPG'
+import { GetUser } from '../../redux/actions/authMe';
 
 export const DashboardPage = () => {
   
@@ -15,8 +17,15 @@ export const DashboardPage = () => {
 const [PageNow, setPageNow] = useState(1);
 const [SearchDataMovie, setSearchDataMovie] = useState('');
 const dispatch = useDispatch()
+const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-const { data: movielist } = useGetDataUser({});
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
+// const { data: movielist } = useGetDataUser({});
+
+// const users = useSelector((store) => store.dataUser)
 
 const getDataMovie = async () => {
   const data = await dispatch(DataMovie(PageNow))
@@ -30,10 +39,14 @@ const goToSearch = (e) => {
 
 const movies = useSelector((store) => store.movie.dataMovie);
 
+const getDataUser = async () => {
+  const user = await dispatch(GetUser)
+}
+
 useEffect(() => {
-  getDataMovie()
+  getDataMovie();
   // console.log(popularMovie, "ini datanya")
-}, [movielist, PageNow])
+}, [PageNow, getDataUser()]);
 
 
   return (
@@ -41,7 +54,7 @@ useEffect(() => {
       <div className='font-sans'>
         <div className=" min-h-screen bg-transparent h-screen">
           <div className='relative z-40 p-4'>
-            <div className='flex justify-between bg-slate-950'>
+            <div className='flex justify-between bg-slate-950 items-center'>
               <div>
                 <Link className="text-xl font-semibold mb-2" to={`/dashboard`}>
                   <h1 className='text-red-500 font-bold text-4xl'>MovieList</h1>
@@ -54,18 +67,32 @@ useEffect(() => {
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
                     </svg>
-
                   </button>
                 </form>
               </div>
-              <div className='gap-3'>
-                <button onClick={()=>{dispatch(LogOut())}} className="text-white w-[6rem] h-[2.5rem] rounded-full font-semibold bg-red-500">Logout</button>
+              <div className='flex flex-row gap-3'>
+                {/* <div>
+                  <button onClick={()=>{dispatch(LogOut())}} className="text-white w-[6rem] h-[2.5rem] rounded-full font-semibold bg-red-500">Logout</button>
+                </div> */}
+                <div className='relative' onClick={toggleDropdown}>
+                  <div>
+                    <img src={user} className='h-11 w-11 rounded-full items-center flex' alt='user'></img>
+                    <span>{isDropdownOpen }</span>
+                  </div>
+                  {isDropdownOpen && (          
+                  <div className='absolute px-6 py-4 bg-white right-[1px] mt-2 rounded-md opacity-90'>        
+                      <p className='text-[13px]'>Agam Pratama</p>
+                      <p className='text-[13px]'>agam@gmail.com</p>
+                      <button onClick={()=>{dispatch(LogOut())}} className='w-full bg-red-500 text-white text-[15px] mt-2 rounded-lg hover:bg-red-600 active:scale-[.98] active:duration-75 hover:scale-[1.01] transition-all ease-in-out'>Logout</button>
+                  </div>
+                  )}  
+                </div>
               </div>
             </div>
           </div>
           
           <Carousel
-            className="mt-[-4.5rem]"
+            className="mt-[-5rem]"
             navigation={({ setActiveIndex, activeIndex, length }) => (
               <div className="absolute bottom-4 left-2/4 z-50 flex -translate-x-2/4 gap-2">
                 {new Array(length).fill("").map((_, i) => (
