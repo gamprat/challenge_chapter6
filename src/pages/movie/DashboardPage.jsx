@@ -25,11 +25,13 @@ const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
 // const { data: movielist } = useGetDataUser({});
 
-// const users = useSelector((store) => store.dataUser)
-
 const getDataMovie = async () => {
   const data = await dispatch(DataMovie(PageNow))
 } 
+
+const getDataUser = async () => {
+  const userData = await dispatch(GetUser())
+}
 
 const goToSearch = (e) => {
   e.preventDefault();
@@ -38,15 +40,12 @@ const goToSearch = (e) => {
 };
 
 const movies = useSelector((store) => store.movie.dataMovie);
-
-const getDataUser = async () => {
-  const user = await dispatch(GetUser)
-}
+const user1 = useSelector((store) => store.me.dataUser)
 
 useEffect(() => {
   getDataMovie();
   // console.log(popularMovie, "ini datanya")
-}, [PageNow, getDataUser()]);
+}, [getDataUser(), PageNow]);
 
 
   return (
@@ -81,8 +80,8 @@ useEffect(() => {
                   </div>
                   {isDropdownOpen && (          
                   <div className='absolute px-6 py-4 bg-white right-[1px] mt-2 rounded-md opacity-90'>        
-                      <p className='text-[13px]'>Agam Pratama</p>
-                      <p className='text-[13px]'>agam@gmail.com</p>
+                      <p className='text-[13px]'>{user1.name}</p>
+                      <p className='text-[13px]'>{user1.email}</p>
                       <button onClick={()=>{dispatch(LogOut())}} className='w-full bg-red-500 text-white text-[15px] mt-2 rounded-lg hover:bg-red-600 active:scale-[.98] active:duration-75 hover:scale-[1.01] transition-all ease-in-out'>Logout</button>
                   </div>
                   )}  
