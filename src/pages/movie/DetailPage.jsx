@@ -13,7 +13,7 @@ export const DetailPage = () => {
 
     const { data: movielist } = useGetDataUser({});
 
-    const movies = useSelector((store) => store.movie.dataMovie)
+    const movies = useSelector((store) => store.detail.detailMovie)
 
     const getDataMovieById = async () => {
         const data = await dispatch(DetailMovie(id))
