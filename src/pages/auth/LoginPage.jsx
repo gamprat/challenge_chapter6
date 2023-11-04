@@ -44,7 +44,7 @@ export const LoginPage = () => {
                         <div className='py-1'>
                             <span className='mb-2 text-sm'>Email Address</span>
                             <div className='items-center flex justify-end'>
-                                <input onChange={handleInput} id='email' className='w-[250px] p-2 border border-gray-300 rounded-md placeholder:font-light placeholder:text-gray-700' type="email"></input>
+                                <input onChange={handleInput} id='email' className='w-[250px] p-2 border border-gray-300 rounded-md caret-black placeholder:font-light placeholder:text-gray-700' type="email"></input>
                                 <span className='absolute mr-3'><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
                                 </svg>
@@ -54,11 +54,11 @@ export const LoginPage = () => {
                         <div className='py-1'>
                             <span className='mb-2 text-sm'>Password</span>
                             <div className='items-center flex justify-end'>
-                                <input onChange={handleInput} id='password' className='w-[250px] p-2 border border-gray-300 rounded-md placeholder:font-light placeholder:text-gray-700' type={(open === false) ? 'password' : 'text'}></input>
+                                <input onChange={handleInput} id='password' className='w-[250px] p-2 border border-gray-300 rounded-md caret-black placeholder:font-light placeholder:text-gray-700' type={(open === false) ? 'password' : 'text'}></input>
                                 <span className='absolute mr-3 text-gray-500'>{(open === false ) ? <AiFillEyeInvisible onClick={toggle}/> : <AiFillEye onClick={toggle}/>}</span>
                             </div>
                         </div>
-                        <button onClick={() => {loginUser()}} className='w-[250px] bg-gradient-to-r from-red-600 from-50% to-[#8B0000] via-50% text-white p-2 rounded-md mt-6 hover:bg-white active:scale-[.98] active:duration-75 hover:scale-[1.01] transition-all ease-in-out'>Login</button>
+                        <button onClick={() => {loginUser()}} className='w-[250px] bg-gradient-to-r from-red-600 from-50% to-[#8B0000] via-50% text-white p-2 rounded-md mt-6  caret-black'>Login</button>
                         <div>
                             <h3 className='justify-center flex mt-2'>or</h3>
                         </div>
