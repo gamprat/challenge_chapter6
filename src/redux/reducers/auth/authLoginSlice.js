@@ -3,7 +3,6 @@ import { CookieKeys, CookieStorage } from "../../../utils/cookies";
 
 const initialState = {
     token : CookieStorage.get(CookieKeys.AuthToken),
-    tokenGoogle: "",
     isLogin : "",
     user : ""
 }
@@ -14,9 +13,6 @@ const authLoginSlice = createSlice({
     reducers : {
         setToken: (state, action) => {
             state.token = action.payload;
-        },
-        setTokenGoogle: (state, action) => {
-            state.tokenGoogle = action.payload;
         },
         setIsLoggedIn: (state, action) => {
             state = { ...state, isLogin : action.payload };

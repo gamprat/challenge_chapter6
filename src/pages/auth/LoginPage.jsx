@@ -1,17 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import { useLoginUser } from '../../services/auth/login_user';
-import { GoogleLogin } from "@react-oauth/google";
+import { GoogleLogin, useGoogleLogin } from "@react-oauth/google";
 import image from '../../asset/img/login_image.png'
 import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
 import { useDispatch } from "react-redux";
 import { LoginUser } from "../../redux/actions/authLogin";
+import axios from "axios";
+import { CookieKeys, CookieStorage } from "../../utils/cookies";
+import { setToken } from "../../redux/reducers/auth/authLoginSlice";
+import google from '../../asset/img/google.png'
 
 export const LoginPage = () => {
     const [open, setOpen] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const dispatch = useDispatch()
+    const navigate = useNavigate()
 
     const toggle = () => {
         setOpen(!open)
@@ -34,6 +39,44 @@ export const LoginPage = () => {
             password: password,
         }));
     };
+
+    const registerLoginWithGoogleAction = async (accessToken) => {
+        try {
+            let data = JSON.stringify({
+                access_token: accessToken,
+            });
+
+            let config = {
+                method: "post",
+                maxBodyLength: Infinity,
+                url: `${process.env.REACT_APP_SERVER}/api/v1/auth/google`,
+                headers: {
+                "Content-Type": "application/json",
+                },
+                data: data,
+            };
+
+            const response = await axios.request(config);
+            const { token } = response.data.data;
+
+            CookieStorage.set(CookieKeys.AuthToken, token);
+            dispatch(setToken(token))
+
+            navigate("/dashboard");
+
+            // window.location.href = "/dashboard";
+            } catch (error) {
+            if (axios.isAxiosError(error)) {
+                alert(error.response.data.message);
+                return;
+            }
+        }
+    };
+
+    const loginWithGoogle = useGoogleLogin({
+        onSuccess: (responseGoogle) =>
+        registerLoginWithGoogleAction(responseGoogle.access_token),
+    });
 
     return (
         <div className='hero flex items-center justify-center min-h-screen '>
@@ -62,17 +105,9 @@ export const LoginPage = () => {
                         <div>
                             <h3 className='justify-center flex mt-2'>or</h3>
                         </div>
-                        <div className='justify-center flex mt-3'>
-                            <GoogleLogin
-                                width="250px"
-                                shape='rectangular'
-                                onSuccess={credentialResponse => {
-                                console.log(credentialResponse);
-                                }}
-                                onError={() => {
-                                console.log('Login Failed');
-                                }}
-                            />
+                        <div className='justify-center flex mt-3 items-center gap-3 bg-white p-2 rounded-lg'>
+                            <img className="h-4 w-4" src={google} alt="Google"></img>
+                            <button className="text-[14px]" onClick={loginWithGoogle}>Login with Google</button>
                         </div>
                         <div className='pt-3 justify-center flex'>
                             <span className='text-sm font-bold'>Don't have an account? <a className='text-red-500' href='/'>Sign Up</a></span>
