@@ -44,8 +44,9 @@ const user1 = useSelector((store) => store.me.dataUser)
 
 useEffect(() => {
   getDataMovie();
+  getDataUser();
   // console.log(popularMovie, "ini datanya")
-}, [getDataUser(), PageNow]);
+}, [PageNow]);
 
 
   return (
