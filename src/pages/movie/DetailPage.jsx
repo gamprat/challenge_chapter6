@@ -5,19 +5,31 @@ import { useDispatch, useSelector } from 'react-redux';
 import { LogOut } from '../../redux/actions/authLogin';
 import { SearchDataMovies } from '../../redux/actions/authSearchMovies';
 import { DetailMovie } from '../../redux/actions/authDetailMovies';
+import { GetUser } from '../../redux/actions/authMe';
+import user from "../../asset/img/agam.JPG";
 
 export const DetailPage = () => {
     const [SearchDataMovie, setSearchDataMovie] = useState("");
     const { id } = useParams();
     const dispatch = useDispatch()
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-    const { data: movielist } = useGetDataUser({});
+    const toggleDropdown = () => {
+      setIsDropdownOpen(!isDropdownOpen);
+    };
+
+    // const { data: movielist } = useGetDataUser({});
 
     const movies = useSelector((store) => store.detail.detailMovie)
+    const user1 = useSelector((store) => store.me.dataUser);
 
     const getDataMovieById = async () => {
         const data = await dispatch(DetailMovie(id))
     } 
+
+    const getDataUser = async () => {
+      const userData = await dispatch(GetUser());
+    };
 
     const goToSearch = (e) => {
       e.preventDefault();
@@ -28,7 +40,8 @@ export const DetailPage = () => {
     //untuk melakukan tindakan saat pertama dijalankan atau di mounting
     useEffect(()=>{
         getDataMovieById()
-    }, [movielist])
+        getDataUser()
+    }, [])
 
 
   return (
@@ -52,13 +65,25 @@ export const DetailPage = () => {
                             </button>
                             </form>
                         </div>
-                        <div className='gap-3'>
-                            <button onClick={()=>{dispatch(LogOut())}} class="text-white w-[6rem] h-[2.5rem] rounded-full font-semibold bg-red-500">Logout</button>
+                        <div>
+                            <div className='relative' onClick={toggleDropdown}>
+                                <div>
+                                    <img src={user} className='h-11 w-11 rounded-full items-center flex' alt='user'></img>
+                                    <span>{isDropdownOpen }</span>
+                                </div>
+                                {isDropdownOpen && (          
+                                <div className='absolute px-6 py-4 bg-white right-[1px] mt-2 rounded-md opacity-90'>        
+                                    <p className='text-[13px]'>{user1.name}</p>
+                                    <p className='text-[13px]'>{user1.email}</p>
+                                    <button onClick={()=>{dispatch(LogOut())}} className='w-full bg-red-500 text-white text-[15px] mt-2 rounded-lg hover:bg-red-600 active:scale-[.98] active:duration-75 hover:scale-[1.01] transition-all ease-in-out'>Logout</button>
+                                </div>
+                                )}  
+                            </div>
                         </div>
                     </div>
                 </div>
                
-               <div alt="image 1" className="bg-cover h-[700px] p-4 w-full mt-[-4.5rem]" style={{  backgroundImage: `linear-gradient(to left, transparent, black), url('https://image.tmdb.org/t/p/original${movies.backdrop_path}')`}}  >
+               <div alt="image 1" className="bg-cover h-[700px] p-4 w-full mt-[-5rem]" style={{  backgroundImage: `linear-gradient(to left, transparent, black), url('https://image.tmdb.org/t/p/original${movies.backdrop_path}')`}}  >
                     <div className='flex'>
                         <div className='flex text-white self-center gap-4 mt-[10rem] ms-10 flex-col w-[50%]'>
                             <h1 className='text-[45px] font-bold'>{movies.title}</h1>

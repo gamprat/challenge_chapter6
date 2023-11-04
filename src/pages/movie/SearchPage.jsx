@@ -5,12 +5,19 @@ import { ListData } from '../../asset/components/RanderList/ListData';
 import { useDispatch, useSelector } from 'react-redux';
 import { SearchDataMovies, searchMovies } from '../../redux/actions/authSearchMovies';
 import { LogOut } from '../../redux/actions/authLogin';
+import user from "../../asset/img/agam.JPG";
+import { GetUser } from '../../redux/actions/authMe';
 
 export const SearchPage = () => {
     const { query } = useParams();
     const [SearchDataMovie, setSearchDataMovie] = useState('');
     const [PageNow, setPageNow] = useState(1);
     const dispatch = useDispatch()
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+    const toggleDropdown = () => {
+      setIsDropdownOpen(!isDropdownOpen);
+    };
 
     const { data: movielist } = useGetDataUser({});
 
@@ -20,15 +27,21 @@ export const SearchPage = () => {
         setSearchDataMovie();
     };
 
+    const getDataUser = async () => {
+      const userData = await dispatch(GetUser());
+    };
+
     const searchQuery = useSelector((store) => store.search.searchData)
+    const user1 = useSelector((store) => store.me.dataUser);
 
     useEffect(() => {
+        getDataUser();
         if (query !== undefined) {
         const page = PageNow;
         const queryValue = query || '';
         dispatch(searchMovies(page, queryValue));
         }
-    },[dispatch, PageNow, query, movielist]);
+    },[dispatch, PageNow, query]);
 
     return (
         <div className="bg-[#1e1e2a]">
@@ -51,8 +64,20 @@ export const SearchPage = () => {
                             </button>
                             </form>
                         </div>
-                        <div className='gap-3'>
-                            <button onClick={()=>{dispatch(LogOut())}} className="text-white w-[6rem] h-[2.5rem] rounded-full font-semibold bg-red-500">Logout</button>
+                        <div>
+                            <div className='relative' onClick={toggleDropdown}>
+                                <div>
+                                    <img src={user} className='h-11 w-11 rounded-full items-center flex' alt='user'></img>
+                                    <span>{isDropdownOpen }</span>
+                                </div>
+                                {isDropdownOpen && (          
+                                <div className='absolute px-6 py-4 bg-white right-[1px] mt-2 rounded-md opacity-90'>        
+                                    <p className='text-[13px]'>{user1.name}</p>
+                                    <p className='text-[13px]'>{user1.email}</p>
+                                    <button onClick={()=>{dispatch(LogOut())}} className='w-full bg-red-500 text-white text-[15px] mt-2 rounded-lg hover:bg-red-600 active:scale-[.98] active:duration-75 hover:scale-[1.01] transition-all ease-in-out'>Logout</button>
+                                </div>
+                                )}  
+                            </div>
                         </div>
                     </div>
                 </div>

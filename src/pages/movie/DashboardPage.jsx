@@ -70,10 +70,7 @@ useEffect(() => {
                   </button>
                 </form>
               </div>
-              <div className='flex flex-row gap-3'>
-                {/* <div>
-                  <button onClick={()=>{dispatch(LogOut())}} className="text-white w-[6rem] h-[2.5rem] rounded-full font-semibold bg-red-500">Logout</button>
-                </div> */}
+              <div>
                 <div className='relative' onClick={toggleDropdown}>
                   <div>
                     <img src={user} className='h-11 w-11 rounded-full items-center flex' alt='user'></img>
